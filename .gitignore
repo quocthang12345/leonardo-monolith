@@ -1,0 +1,32 @@
+# --- Target (Maven Build Output) ---
+target/
+*.marshal.json
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+# If you want to share specific code styles, uncomment the next line:
+# !.idea/codeStyles/
+
+# --- Spring Boot & Logs ---
+*.log
+.spring-boot-devtools-lst
+temp/
+
+# --- Maven Wrapper ---
+# Keep the scripts, ignore the binary jar
+.mvn/wrapper/maven-wrapper.jar
+
+# --- OS & Environment ---
+.DS_Store
+Thumbs.db
+.env
+.env.local
+
+# --- Sensitive Configs ---
+# Ignore local overrides but keep the main resource files
+**/src/main/resources/application-local.properties
+**/src/main/resources/application-dev.properties
