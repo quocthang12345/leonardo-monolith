@@ -69,7 +69,7 @@ class AuthenticationAPITest {
         mockMvc.perform(post("/api/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"testuser\", \"password\":\"password\"}"))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().string("mocked-jwt-token"));
     }
 

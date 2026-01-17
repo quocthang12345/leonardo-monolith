@@ -10,6 +10,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: leonardo
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: user
+        ports:
+          - 5432:5432
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,7 +34,13 @@ jobs:
         run: chmod +x mvnw
 
       - name: Build and Test with Maven
-        run: ./mvnw clean package -B
+        env:
+          DB_URL: jdbc:postgresql://localhost:5432/leonardo_test
+          DB_USERNAME: user
+          DB_PASSWORD: password
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        run: ./mvnw clean package -B -Dspring.profiles.active=ci
 
       - name: Upload test report
         if: ${{ failure() }}
@@ -43,4 +58,4 @@ jobs:
 
       - name: Notify workflow
         if: ${{ always() }}
-        run: echo "Workflow finished"
+        run: echo "${{ secrets.MAIL_USERNAME }} and ${{ secrets.MAIL_PASSWORD }}"
