@@ -1,0 +1,46 @@
+name: Leonardo CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: "maven"
+
+      - name: Provide permission to mvnw executable
+        run: chmod +x mvnw
+
+      - name: Build and Test with Maven
+        run: ./mvnw clean package -B
+
+      - name: Upload test report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: '**/target/surefire-reports/'
+
+      - name: Upload Jar file
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: '**/target/*.jar'
+
+      - name: Notify workflow
+        if: ${{ always() }}
+        run: echo "Workflow finished"
