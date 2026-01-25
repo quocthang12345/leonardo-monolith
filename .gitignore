@@ -23,6 +23,8 @@ temp/
 # --- OS & Environment ---
 .DS_Store
 Thumbs.db
+**.env
+leonardo.env
 .env
 .env.local
 
